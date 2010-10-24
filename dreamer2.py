@@ -21,6 +21,7 @@ import glob
 import imp
 import datetime
 
+import Dice
 
 class IrcProfile:
     def __init__(self, title, servers, channels):
@@ -34,7 +35,7 @@ name = "Dreamer"
 nick = "Dreamer"
 reloadpasswd = "DR3@meR"
 
-decoline = "__-__-__-__-_:*:_-__-__-__-__"
+decoline = ".__-__-__-__-_:*:_-__-__-__-__."
 
 #Profiles
 
@@ -52,11 +53,16 @@ def scan(target):
     for moduleSource in glob.glob ( 'commands/*.py' ):
         name = moduleSource.replace ( '.py', '' ).replace ( '\\', '/' ).split ( '/' ) [ 1 ].upper()
         handle = open ( moduleSource )
-        module = imp.load_module ( 'COMMAND.'+name, handle, ( 'commands/' + moduleSource ), ( '.py', 'r', imp.PY_SOURCE ) )
-        if "public" in module.available:
-            pub_commands[name] = module
-        if "private" in module.available:
-            priv_commands[name] = module
+        module = imp.load_module ( 'COMMAND_'+name, handle, ( 'commands/' + moduleSource ), ( '.py', 'r', imp.PY_SOURCE ) )
+        
+        try:
+            if "public" in module.available:
+                pub_commands[name] = module
+            if "private" in module.available:
+                priv_commands[name] = module
+        except:
+            pass
+            
 
     target.priv_commands = priv_commands
     target.pub_commands = pub_commands

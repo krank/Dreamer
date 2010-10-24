@@ -2,3 +2,27 @@ DREAMER
 Roleplaying IRC bot
 
 for single server/channel use
+
+Requirements:
+Python (2.6)
+Python-irclib
+
+Dice rolling:
+d2, 4, 6, 8, 10, 12, 20, 100
+
+Modifiers: +/-
+
+OpenXtY die rolls: If any die shows its maximum value, roll another die and add its result to the total.
+ObXtY: If any die shows its maximum value, replace it with two new dice.
+
+
+To fix:
+ - Proper README
+ - !help: explain tags
+ - !help: the ctcp reload command
+ - !roll: count number of results (for successes)
+ - !roll: special games-rolls (WoD, Gurps, d20?)
+ - !gmon, !gmoff: Add password-based security
+ - External XML file for config
+ - Logging
+ - Support for multiple languages (!speak [language] - command)
