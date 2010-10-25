@@ -5,7 +5,7 @@ restricted = "gm"
 
 def index(parent, connection, event):
     source = event.source().split("!")[0]
-    nick = "Dreamer"
+    nick = parent.nickname
     
     if len(event.arguments()[0].split()) > 1:
         nick = event.arguments()[0].split()[1]

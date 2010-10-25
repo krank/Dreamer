@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*- 
 
 #Dreamer IRC bot v2
 
@@ -20,6 +21,8 @@ import ircbot
 import glob
 import imp
 import datetime
+import time
+import random
 
 import Dice
 
@@ -82,14 +85,15 @@ class DreamerBot(ircbot.SingleServerIRCBot):
         self.p_channels = profile.channels
         self.p_name = profile.title
         
+        self.nickname = name
+        
         ircbot.SingleServerIRCBot.__init__(self, self.p_servers, nick, name)
 
         self.gmlist = [] #Note for later: Save list of GM's?
         
         scan(self)
         self.decoline = decoline
-        
-        
+
 
     #---Generic methods---------------------------------------------------------
     
@@ -98,12 +102,19 @@ class DreamerBot(ircbot.SingleServerIRCBot):
         
         print moment + ": " + text #Note for later: Logging?
         
-
-        
         
     #---Handlers----------------------------------------------------------------
+        
+    def on_nicknameinuse(self, connection, event):
+        print "Nickname in use!"
+        self.nickname = connection.get_nickname() + str(random.randint(1,1024))
+        print "Changing to " + self.nickname
+        connection.nick(self.nickname)
+
     
     def on_welcome(self, connection, event):
+        print self.decoline
+        
         connection.join(self.p_channels)
         self.connection.mode(nick,"+B")
 
@@ -215,6 +226,6 @@ class DreamerBot(ircbot.SingleServerIRCBot):
                 self.describe("Tried whispering to " + target + " but there is no user by that name in the channel")
 
 
-dreamer = DreamerBot(profile["reptiden"])
+dreamer = DreamerBot(profile["solveserver"])
 
 dreamer.start()
