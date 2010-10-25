@@ -23,6 +23,7 @@ import imp
 import datetime
 import time
 import random
+import sys
 
 import Dice
 
@@ -38,7 +39,7 @@ name = "Dreamer"
 nick = "Dreamer"
 reloadpasswd = "DR3@meR"
 
-decoline = ".__-__-__-__-_:*:_-__-__-__-__."
+decoline = ".-__-__-__-__-__-__-__-_:*:_-__-__-__-__-__-__-__-."
 
 #Profiles
 
@@ -51,6 +52,9 @@ pub_commands = {}
 
 #===Scanner for commands========================================================
 def scan(target):
+    
+    print "Scanning for modules..."
+    
     priv_commands = {}
     pub_commands = {}
     for moduleSource in glob.glob ( 'commands/*.py' ):
@@ -61,8 +65,10 @@ def scan(target):
         try:
             if "public" in module.available:
                 pub_commands[name] = module
+                print " Adding module " + module.name + " to [public] module list"
             if "private" in module.available:
                 priv_commands[name] = module
+                print " Adding module " + module.name + " to [private] module list"
         except:
             pass
             
@@ -86,13 +92,16 @@ class DreamerBot(ircbot.SingleServerIRCBot):
         self.p_name = profile.title
         
         self.nickname = name
+        self.decoline = decoline
         
-        ircbot.SingleServerIRCBot.__init__(self, self.p_servers, nick, name)
-
         self.gmlist = [] #Note for later: Save list of GM's?
         
+        print self.decoline
+        print "Connecting to " + str(self.p_servers) + "..."        
+        
+        ircbot.SingleServerIRCBot.__init__(self, self.p_servers, nick, name)
+        
         scan(self)
-        self.decoline = decoline
 
 
     #---Generic methods---------------------------------------------------------
@@ -107,16 +116,19 @@ class DreamerBot(ircbot.SingleServerIRCBot):
         
     def on_nicknameinuse(self, connection, event):
         print "Nickname in use!"
-        self.nickname = connection.get_nickname() + str(random.randint(1,1024))
+        self.nickname = name + str(random.randint(1,1024))
         print "Changing to " + self.nickname
         connection.nick(self.nickname)
 
     
     def on_welcome(self, connection, event):
         print self.decoline
+        print "Entering channel " + self.p_channels + "..."
         
         connection.join(self.p_channels)
         self.connection.mode(nick,"+B")
+        
+        print self.decoline
 
 
     def on_privmsg(self, connection, event):
@@ -225,7 +237,35 @@ class DreamerBot(ircbot.SingleServerIRCBot):
                     self.say(source, "Target " + target + " does not exist")
                 self.describe("Tried whispering to " + target + " but there is no user by that name in the channel")
 
+#if there's no valid profile as argument, show menu
 
-dreamer = DreamerBot(profile["solveserver"])
+p = False
+if len(sys.argv) > 1:
+    if profile.has_key(sys.argv[1]):
+        p = profile[sys.argv[1]]
 
-dreamer.start()
+
+if not p:
+    choice = -1
+    keys = profile.keys()
+    while choice not in range(0,len(profile)) + ["q"]:
+        print decoline
+        print "Choose your profile"
+        print
+        i = 0
+        for pl in keys:
+            print str(i) + " -::- " + profile[pl].title
+            i+=1
+        
+        choice = raw_input("Select a number or 'q': ")
+        
+        if choice.isdigit():
+            choice = int(choice)
+        
+    
+    if choice != "q":
+        p = profile[keys[choice]]
+        
+if p:
+    dreamer = DreamerBot(p)
+    dreamer.start()
