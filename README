@@ -18,8 +18,6 @@ ObXtY: If any die shows its maximum value, replace it with two new dice.
 
 To fix:
  - Proper README
- - !help: explain tags
- - !help: the ctcp reload command
  - !roll: count number of results (for successes)
  - !roll: special games-rolls (WoD, Gurps, d20?)
  - !gmon, !gmoff: Add password-based security
