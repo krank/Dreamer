@@ -132,8 +132,6 @@ class DreamerBot(ircbot.SingleServerIRCBot):
         connection.join(self.p_channels)
         self.connection.mode(nick,"+B")
         
-        self.connection.action(self.p_channels, "testar")
-        
         print self.decoline
 
 
