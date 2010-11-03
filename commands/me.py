@@ -8,5 +8,5 @@ def index(parent, connection, event):
     source = event.source().split("!")[0]
     
     if len(event.arguments()[0].split()) > 1:
-        message = "/me " + event.arguments()[0]
-        parent.say(source, message)
+        message = event.arguments()[0][4:]
+        parent.say(source, message, action=True)

@@ -25,6 +25,8 @@ import time
 import random
 import sys
 
+import irclib
+
 import Dice
 
 class IrcProfile:
@@ -102,6 +104,8 @@ class DreamerBot(ircbot.SingleServerIRCBot):
         ircbot.SingleServerIRCBot.__init__(self, self.p_servers, nick, name)
         
         scan(self)
+        
+        
 
 
     #---Generic methods---------------------------------------------------------
@@ -127,6 +131,8 @@ class DreamerBot(ircbot.SingleServerIRCBot):
         
         connection.join(self.p_channels)
         self.connection.mode(nick,"+B")
+        
+        self.connection.action(self.p_channels, "testar")
         
         print self.decoline
 
@@ -216,19 +222,22 @@ class DreamerBot(ircbot.SingleServerIRCBot):
 
     # Built-in Say method
     
-    def say(self, source, message, target=False):
+    def say(self, source, message, target=False, action=False):
         
         # If target is not defined, use current channel
         if not target:
             target = self.p_channels
             self.describe("Saying in channel " + target + ": " + message)
             self.connection.privmsg(target, message)
-
+            
         else:
             # If target user exist, send the message to it
             
             if self.channels[self.p_channels].has_user(target):
-                self.connection.privmsg(target, message)
+                if action:
+                    self.connection.action(target, message)
+                else:
+                    self.connection.privmsg(target, message)
                 self.describe("Whispering to " + target + ": " + message)
                 
             # Otherwise, throw an error
