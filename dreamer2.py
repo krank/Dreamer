@@ -27,7 +27,6 @@ import sys
 
 import irclib
 
-import Dice
 
 class IrcProfile:
     def __init__(self, title, servers, channels):

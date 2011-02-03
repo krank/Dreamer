@@ -29,7 +29,7 @@ def index(parent, connection, event):
     t.append("/ctcp [bot's nick] [secret password] -::- Reload all plugins without restarting the bot")
     t.append(" ")
     t.append("[all] = available to everyone, [gm] = available only to gm's")
-    t.append("[private] = available as privmsg command to the bot, [public] = can be used in the channel")
+    t.append("[private] = available as privmsg command to the bot, [public] = Ellcan be used in the channel")
     
         
 
